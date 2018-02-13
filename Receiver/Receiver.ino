@@ -1,30 +1,23 @@
 #include <FlexCAN.h>
 #include <TeensyCANBase.h>
-int pin = 25;
 
-
-
-
-void changeLEDs(byte* msg) {
-  int mode = msg[6] + (msg[7] << 8);
-  int value = msg[4] + (msg[5] << 8);
-  int R = msg[2];
-  int G = msg[1];
-  int B = msg[0];
-  Serial.println(mode);
-}
+int toggle = 0;
 
 void setup(void) {
-  CAN_add_id(0x672, &changeLEDs);
   CAN_begin();
-  pinMode(pin, OUTPUT);
+  CAN_add_id(0x612, &checkCAN);
+  pinMode(13, OUTPUT);
   Serial.begin(9600);
   delay(1000);
   Serial.println("Teensy 3.X CAN Receiver");
-  digitalWrite(pin, HIGH);
+  digitalWrite(13, HIGH);
+  toggle = 1;
 }
 
-void writeLongs(uint32_t id, long value1, long value2){
+void checkCAN(byte* msg) {
+ Serial.println("Yay");
+}
+/* void writeLongs(uint32_t id, long value1, long value2){
   byte * msg = new byte[8];
 
   for(int i = 0; i < 4; i++){
@@ -37,10 +30,19 @@ void writeLongs(uint32_t id, long value1, long value2){
   CAN_write(id, msg);
 
   delete msg;
-}
+}*/
 
 void loop(void) {
   CAN_update();
-  delay(10);
+  Serial.println("working");
+  if (toggle == 1){
+    digitalWrite(13, LOW);
+    toggle = 0;
+  } else {
+    digitalWrite(13, HIGH);
+    toggle = 1;
+  }
+  delay(50);
+  
 }
 

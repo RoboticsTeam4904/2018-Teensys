@@ -25,8 +25,8 @@ const int limitWriteRight = 21;
 int limitStateLeft = 0;
 int limitStateRight = 0;
 
-int limitOutputLeft = 0000;
-int limitOutputRight = 0000;
+long limitOutputLeft = 0000;
+long limitOutputRight = 0000;
 
 void resetArmEncoder(byte * msg) {
   if (msg[0] == 0x72 && msg[1] == 0x65 && msg[2] == 0x73 && msg[3] == 0x65 && msg[4] == 0x74 && msg[5] == 0x65 && msg[6] == 0x6e && msg[7] == 0x63) {

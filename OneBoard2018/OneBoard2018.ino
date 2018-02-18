@@ -76,10 +76,10 @@ void setup(void) {
   armData.rate = 9;
   CAN_add_id(0x612, &resetArmEncoder);
 
-  pinmode(limitReadLeft, INPUT);
-  pinmode(limitReadRight, INPUT);
-  pinmode(limitWriteLeft, OUTPUT);
-  pinmode(limitWriteRight, OUTPUT);  
+  pinMode(limitReadLeft, INPUT);
+  pinMode(limitReadRight, INPUT);
+  pinMode(limitWriteLeft, OUTPUT);
+  pinMode(limitWriteRight, OUTPUT);  
 }
 
 

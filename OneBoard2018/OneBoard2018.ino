@@ -17,6 +17,13 @@ encoderData rightData;
 Encoder leftEncoder(11, 12);
 encoderData leftData;
 
+const int limitReadLeft = 16;
+const int limitReadRight = 20;
+const int limitWriteLeft = 17;
+const int limitWriteRight = 21;
+
+int limitStateLeft = 0;
+int limitStateRight = 0;
 
 void resetArmEncoder(byte * msg) {
   if (msg[0] == 0x72 && msg[1] == 0x65 && msg[2] == 0x73 && msg[3] == 0x65 && msg[4] == 0x74 && msg[5] == 0x65 && msg[6] == 0x6e && msg[7] == 0x63) {
@@ -68,6 +75,11 @@ void setup(void) {
   armData.pos = -999;
   armData.rate = 9;
   CAN_add_id(0x612, &resetArmEncoder);
+
+  pinmode(limitReadLeft, INPUT);
+  pinmode(limitReadRight, INPUT);
+  pinmode(limitWriteLeft, OUTPUT);
+  pinmode(limitWriteRight, OUTPUT);  
 }
 
 
@@ -128,5 +140,18 @@ void loop(void) {
     }
   }
   writeLongs(0x612, armData.pos, armData.rate);
+  
+  digitalWrite(limitWriteLeft, HIGH);
+  
+  limitStateLeft = digitalRead(limitReadLeft);
+  if (limitStateLeft == HIGH) {
+    writeLongs(0x613, 1000, 0000);
+  }
+  
+  digitalWrite(limitWriteRight, HIGH);
+  limitStateRight = digitalRead(limitReadRight);
+  if (limitStateLeft == HIGH) {
+    writeLongs(0x614, 1000, 0000);
+  }
   delay(50);
 }

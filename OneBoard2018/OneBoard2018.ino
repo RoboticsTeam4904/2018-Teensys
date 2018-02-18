@@ -25,6 +25,9 @@ const int limitWriteRight = 21;
 int limitStateLeft = 0;
 int limitStateRight = 0;
 
+int limitOutputLeft = 0000;
+int limitOutputRight = 0000;
+
 void resetArmEncoder(byte * msg) {
   if (msg[0] == 0x72 && msg[1] == 0x65 && msg[2] == 0x73 && msg[3] == 0x65 && msg[4] == 0x74 && msg[5] == 0x65 && msg[6] == 0x6e && msg[7] == 0x63) {
     armEncoder.write(0);
@@ -145,13 +148,20 @@ void loop(void) {
   
   limitStateLeft = digitalRead(limitReadLeft);
   if (limitStateLeft == HIGH) {
-    writeLongs(0x613, 1000, 0000);
+    limitOutputLeft = 0001;
+  } else {
+    limitOutputLeft = 0000;
   }
   
   digitalWrite(limitWriteRight, HIGH);
   limitStateRight = digitalRead(limitReadRight);
   if (limitStateLeft == HIGH) {
-    writeLongs(0x614, 1000, 0000);
+    limitOutputRight = 0001;
+  } else {
+    limitOutputRight = 0000;
   }
+  
+  writeLongs(0x613, limitOutputLeft, limitOutputRight);
+  
   delay(50);
 }
